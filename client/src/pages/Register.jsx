@@ -31,7 +31,7 @@ function Register() {
   }
   return (
     <Center bg="gray.700" h="100vh">
-      <Box bg="whiteAlpha.900" w="500px" borderRadius="md" color="blue.800" boxShadow="base" p="10">
+      <Box bg="white" w="500px" borderRadius="md" boxShadow="base" p="10">
         <Center marginBottom="10">
           <Image src={logo} alt="ChatLog" boxSize="60%" />
         </Center>
@@ -46,16 +46,16 @@ function Register() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl>
             <FormLabel>Name</FormLabel>
-            <Controller name="name" control={control} defaultValue="" render={({ field }) => <Input type="text" bg="white" marginBottom="16px" size="lg" placeholder="Your name" {...field} />} />
+            <Controller name="name" control={control} defaultValue="" render={({ field }) => <Input type="text" bg="whiteAlpha.900" marginBottom="16px" size="lg" placeholder="Your name" {...field} />} />
           </FormControl>
           <FormControl>
             <FormLabel>Email</FormLabel>
-            <Controller name="email" control={control} defaultValue="" render={({ field }) => <Input type="email" bg="white" marginBottom="16px" size="lg" placeholder="you@yourdomain" {...field} />} />
+            <Controller name="email" control={control} defaultValue="" render={({ field }) => <Input type="email" bg="whiteAlpha.900" marginBottom="16px" size="lg" placeholder="you@yourdomain" {...field} />} />
           </FormControl>
           <FormControl>
             <FormLabel>Password</FormLabel>
             <InputGroup size="lg">
-              <Controller name="password" control={control} defaultValue="" render={({ field }) => <Input type={show ? 'text' : 'password'} bg="white" marginBottom="16px" placeholder="Enter password" {...field} />} />
+              <Controller name="password" control={control} defaultValue="" render={({ field }) => <Input type={show ? 'text' : 'password'} bg="whiteAlpha.900" size="lg" marginBottom="16px" placeholder="Enter password" {...field} />} />
               <InputRightElement marginRight="4">
                 <Button size="sm" onClick={toggleShowPassword} variant="link" colorScheme="purple">{show ? 'HIDE' : 'SHOW'}</Button>
               </InputRightElement>
