@@ -21,26 +21,25 @@ import {
 import {
   FiArrowRight,
 } from 'react-icons/fi';
-import { gql, useMutation } from '@apollo/client';
+import { gql, useLazyQuery } from '@apollo/client';
 import logo from '../assets/img/logo.svg';
 
-const REGISTER_USER = gql`
-  mutation register($username: String! $email: String! $password: String!) {
-    register(username: $username email: $email password: $password) {
-      username email createdAt
+const LOGIN_USER = gql`
+  query login($username: String! $password: String!) {
+    login(username: $username password: $password) {
+      username email token
     }
   }
 `;
 const schemaValidation = yup.object().shape({
   username: yup.string().required(),
-  email: yup.string().email().required(),
   password: yup.string().required().min(6).max(15),
 });
-function Register(props) {
+function Login(props) {
   const [errorsFromServer, setErrorsFromServer] = useState(null);
-  const [registerUser, { loading }] = useMutation(REGISTER_USER, {
-    update: (_, __) => props.history.push('/login'),
+  const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
     onError: (err) => setErrorsFromServer(err.graphQLErrors[0].extensions.errors),
+    onCompleted: (data) => { console.log(data); props.history.push('/'); },
   });
   const [show, toggleShow] = useState(false);
   const { control, handleSubmit, formState: { errors } } = useForm({
@@ -51,8 +50,8 @@ function Register(props) {
   }
   function onSubmit(userInput) {
     setErrorsFromServer(null);
-    const { username, email, password } = userInput;
-    registerUser({ variables: { username, email, password } });
+    const { username, password } = userInput;
+    loginUser({ variables: { username, password } });
   }
   return (
     <Center bg="gray.700" h="100vh">
@@ -61,12 +60,12 @@ function Register(props) {
           <Image src={logo} alt="ChatLog" boxSize="60%" />
         </Center>
         <Text fontSize="2xl" fontWeight="semibold" align="center">
-          Create new ChatLog account
+          Sign in to ChatLog
         </Text>
         <Text fontSize="md" fontWeight="normal" align="center" marginBottom="16px">
-          already have an account,
+          Not a member ?
           {' '}
-          <Link as={ReachLink} to="/login">sign in now</Link>
+          <Link as={ReachLink} to="/register">Sign up now</Link>
         </Text>
         <form onSubmit={handleSubmit(onSubmit)}>
           <FormControl isInvalid={errors.username?.message || errorsFromServer?.username} marginBottom="16px">
@@ -74,13 +73,6 @@ function Register(props) {
             <Controller name="username" control={control} defaultValue="" render={({ field }) => <Input type="text" bg="whiteAlpha.900" size="lg" placeholder="Your name" {...field} />} />
             <FormErrorMessage>
               {errors.username?.message || errorsFromServer?.username}
-            </FormErrorMessage>
-          </FormControl>
-          <FormControl isInvalid={errors.email?.message || errorsFromServer?.email} marginBottom="16px">
-            <FormLabel>Email</FormLabel>
-            <Controller name="email" control={control} defaultValue="" render={({ field }) => <Input type="email" bg="whiteAlpha.900" size="lg" placeholder="you@yourdomain" {...field} />} />
-            <FormErrorMessage>
-              {errors.email?.message || errorsFromServer?.email}
             </FormErrorMessage>
           </FormControl>
           <FormControl marginBottom="16px" isInvalid={errors.password?.message || errorsFromServer?.password}>
@@ -94,9 +86,12 @@ function Register(props) {
             <FormErrorMessage>
               {errors.password?.message || errorsFromServer?.password}
             </FormErrorMessage>
+            <Text fontSize="sm" align="left" marginTop="8px">
+              <Link as={ReachLink} to="/password_reset">Forgot password?</Link>
+            </Text>
           </FormControl>
           <Center w="100%">
-            <Button isLoading={loading} loadingText="Loading" colorScheme="purple" size="lg" type="submit" rightIcon={<Icon as={FiArrowRight} />}>Sign up</Button>
+            <Button isLoading={loading} loadingText="Loading" colorScheme="purple" size="lg" type="submit" rightIcon={<Icon as={FiArrowRight} />}>Log in</Button>
           </Center>
         </form>
       </Box>
@@ -105,4 +100,4 @@ function Register(props) {
   );
 }
 
-export default Register;
+export default Login;

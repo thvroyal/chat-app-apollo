@@ -88,11 +88,6 @@ module.exports = {
           errors.username = "username must not be empty";
         if (password.trim() === "")
           errors.password = "password must not be empty";
-        if (confirmPassword.trim() === "")
-          errors.confirmPassword = "confirm password must not be empty";
-
-        if (password !== confirmPassword)
-          errors.confirmPassword = "password must match";
         //Check if username / email exists
         // const userByUsername = await User.findOne({ where: { username } });
         // const userByEmail = await User.findOne({ where: { email } });
@@ -118,7 +113,8 @@ module.exports = {
         console.log(error);
         if (error.name === "SequelizeUniqueConstraintError") {
           error.errors.forEach(
-            (e) => (errors[e.path] = `${e.path} is already taken`)
+            (e) => {const errorName = e.path.split('.')[1] 
+            return (errors[errorName] = `${errorName} is already taken`)}
           );
         } else if (error.name === "SequelizeValidationError") {
           error.errors.forEach((e) => (errors[e.path] = e.message));
