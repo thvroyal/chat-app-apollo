@@ -39,7 +39,10 @@ function Login(props) {
   const [errorsFromServer, setErrorsFromServer] = useState(null);
   const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
     onError: (err) => setErrorsFromServer(err.graphQLErrors[0].extensions.errors),
-    onCompleted: (data) => { console.log(data); props.history.push('/'); },
+    onCompleted: (data) => {
+      localStorage.setItem('token', data.login.token);
+      props.history.push('/');
+    },
   });
   const [show, toggleShow] = useState(false);
   const { control, handleSubmit, formState: { errors } } = useForm({
