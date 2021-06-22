@@ -23,6 +23,7 @@ import {
 } from 'react-icons/fi';
 import { gql, useLazyQuery } from '@apollo/client';
 import logo from '../assets/img/logo.svg';
+import { useAuthDispatch } from '../context/auth';
 
 const LOGIN_USER = gql`
   query login($username: String! $password: String!) {
@@ -36,11 +37,12 @@ const schemaValidation = yup.object().shape({
   password: yup.string().required().min(6).max(15),
 });
 function Login(props) {
+  const dispatch = useAuthDispatch();
   const [errorsFromServer, setErrorsFromServer] = useState(null);
   const [loginUser, { loading }] = useLazyQuery(LOGIN_USER, {
     onError: (err) => setErrorsFromServer(err.graphQLErrors[0].extensions.errors),
     onCompleted: (data) => {
-      localStorage.setItem('token', data.login.token);
+      dispatch({ type: 'LOGIN', payload: data.login });
       props.history.push('/');
     },
   });
