@@ -7,6 +7,7 @@ import theme from './theme/index';
 import Register from './pages/Register';
 import Welcome from './pages/Welcome';
 import Login from './pages/Login';
+import Home from './pages/Home';
 
 import { AuthProvider } from './context/auth';
 import DynamicRoute from './utils/DynamicRoute';
@@ -21,7 +22,8 @@ function App() {
             <Switch>
               <DynamicRoute path="/register" component={Register} guest />
               <DynamicRoute path="/login" component={Login} guest />
-              <DynamicRoute exact path="/" component={Welcome} authenticated />
+              <DynamicRoute path="/chat" component={Home} authenticated />
+              <DynamicRoute exact path="/" component={Welcome} guest />
             </Switch>
           </ChakraProvider>
         </BrowserRouter>

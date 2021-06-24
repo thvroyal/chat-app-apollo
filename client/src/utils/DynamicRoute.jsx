@@ -8,6 +8,6 @@ export default function DynamicRoute(props) {
   if (authenticated && !user) {
     return <Redirect to="/login" />;
   } if (guest && user) {
-    return <Redirect to="/" />;
+    return <Redirect to="/chat" />;
   } return <Route component={component} {...props} />;
 }

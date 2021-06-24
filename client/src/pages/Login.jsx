@@ -43,7 +43,7 @@ function Login(props) {
     onError: (err) => setErrorsFromServer(err.graphQLErrors[0].extensions.errors),
     onCompleted: (data) => {
       dispatch({ type: 'LOGIN', payload: data.login });
-      props.history.push('/');
+      props.history.push('/chat');
     },
   });
   const [show, toggleShow] = useState(false);
